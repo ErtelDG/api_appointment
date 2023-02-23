@@ -17,7 +17,6 @@ from datetime import datetime
 class DoctorViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
-
     """
     > The function takes a request, gets all the doctors from the database, serializes them, and returns
     the serialized data
@@ -29,7 +28,6 @@ class DoctorViewSet(viewsets.ViewSet):
         queryset = models.Doctor.objects.all()
         serializer = serializers.DoctorSerializer(queryset, many=True)
         return Response(serializer.data)
-
 
     """
     If the user serializer is valid, save the user, then if the doctor serializer is valid, save the
@@ -53,7 +51,6 @@ class DoctorViewSet(viewsets.ViewSet):
             user.delete()
             return Response(doctor_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
     """
     > The function retrieves a doctor from the database and returns it as a JSON object
     
@@ -69,7 +66,6 @@ class DoctorViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response({'error': 'Doctor not found'}, status=status.HTTP_404_NOT_FOUND)
-
 
     """
     If the doctor exists, update the doctor's information with the new information provided in the
@@ -90,7 +86,6 @@ class DoctorViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
     """
     > The function takes a request and a primary key (pk) as arguments, and returns a response
@@ -113,7 +108,6 @@ class DoctorViewSet(viewsets.ViewSet):
 class PatientViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
-
     """
     > The function takes a request, gets all the patients from the database, serializes them, and
     returns them as a response
@@ -125,7 +119,6 @@ class PatientViewSet(viewsets.ViewSet):
         queryset = models.Patient.objects.all()
         serializer = serializers.PatientSerializer(queryset, many=True)
         return Response(serializer.data)
-
 
     """
     If the user serializer is valid, save the user, then if the patient serializer is valid, save the
@@ -141,8 +134,7 @@ class PatientViewSet(viewsets.ViewSet):
             user = user_serializer.save()
         else:
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-       
-       
+      
         patient_serializer = serializers.PatientSerializer(data=request.data)
         
         if patient_serializer.is_valid():
@@ -151,7 +143,6 @@ class PatientViewSet(viewsets.ViewSet):
         else:
             user.delete()
             return Response(patient_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
     """
     > Retrieve a patient by id
@@ -169,10 +160,8 @@ class PatientViewSet(viewsets.ViewSet):
         else:
             return Response({'error': 'Patient not found'}, status=status.HTTP_404_NOT_FOUND)
 
-
     """
-    We're going to update the patient with the given id with the data in the request
-    
+    We're going to update the patient with the given id with the data in the request    
     :param request: The request object that was sent to the view
     :param pk: The primary key of the patient you want to update
     :return: The response is a JSON object with the following keys:
@@ -189,10 +178,8 @@ class PatientViewSet(viewsets.ViewSet):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
     """
     > The function takes in a request and a primary key (pk) and deletes the patient with the given pk
-    
     :param request: The request object
     :param pk: The primary key of the object you want to retrieve
     :return: The response is a dictionary with two keys: message and doctor.
@@ -211,11 +198,9 @@ class AppointmentViewSet(viewsets.ViewSet):
     serializer_class = serializers.AppointmentSerializer
     queryset = models.Appointment.objects.all()
 
-
     """
     > The function takes a request, gets all the appointments from the database, serializes them, and
-    returns them as a response.
-    
+    returns them as a response.    
     :param request: The request object
     :return: A list of all the appointments in the database.
     """
@@ -224,19 +209,16 @@ class AppointmentViewSet(viewsets.ViewSet):
         serializer = serializers.AppointmentSerializer(queryset, many=True)
         return Response(serializer.data)
 
-
     """
     If the required fields are not in the request, raise a ParseError. If the patient or doctor ID is
     invalid, raise a ValidationError. If the date is not in the correct format, raise a ValidationError.
     If the serializer is valid, save the appointment and return the serializer data. Otherwise, return
-    the serializer errors
-    
+    the serializer errors   
     :param request: The request object
     :return: The response is a serialized version of the appointment object.
     """
     def create(self, request):
         required_fields = ['title', 'description', 'patient', 'doctor', 'date']
-
       
         for field in required_fields:
             if field not in request.data:
@@ -271,11 +253,9 @@ class AppointmentViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
     """
     It tries to get an appointment with the given primary key, and if it doesn't exist, it returns a 404
-    error. Otherwise, it returns the appointment
-    
+    error. Otherwise, it returns the appointment    
     :param request: The request object that is sent to the view
     :param pk: primary key
     :return: The appointment object is being returned.
@@ -289,13 +269,11 @@ class AppointmentViewSet(viewsets.ViewSet):
         serializer = serializers.AppointmentSerializer(appointment)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-
     """
     We're trying to update an appointment, but if the appointment doesn't exist, we return a 404 error.
     If the appointment does exist, we try to update it with the data from the request. If the data is
     valid, we save the appointment and return a 202 status code. If the data is invalid, we return a 400
-    status code
-    
+    status code    
     :param request: The request object that is sent to the view
     :param pk: The primary key of the object you want to update
     :return: The serializer.data is being returned.
@@ -312,10 +290,8 @@ class AppointmentViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
     """
-    > The function takes in a request and a primary key (pk) and returns a response
-    
+    > The function takes in a request and a primary key (pk) and returns a response    
     :param request: The request object is used to get information about the request that was made to the
     API
     :param pk: The primary key of the appointment to be deleted
@@ -333,14 +309,12 @@ class AppointmentViewSet(viewsets.ViewSet):
         return Response({'message':'appointment deleted successully', 'apponintment':appointment_title},status=status.HTTP_200_OK)
    
 
-
 class UsersViewSet(viewsets.ViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     """
     > The function takes a request, gets all the users from the database, serializes them, and returns
-    them as a response
-    
+    them as a response   
     :param request: The request object
     :return: A list of all users.
     """
@@ -349,11 +323,9 @@ class UsersViewSet(viewsets.ViewSet):
         serializer = serializers.UserSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
     """
     If the serializer is valid, save the serializer and return a 201 status code. If the serializer is
-    not valid, return a 400 status code
-    
+    not valid, return a 400 status code    
     :param request: The request object
     :return: The serializer.data is being returned.
     """
@@ -365,10 +337,8 @@ class UsersViewSet(viewsets.ViewSet):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
     """
-    > This function retrieves a single user from the database and returns it as a JSON object
-    
+    > This function retrieves a single user from the database and returns it as a JSON object    
     :param request: The request object
     :param pk: The primary key of the object you want to retrieve
     :return: The serializer.data is being returned.
@@ -379,13 +349,11 @@ class UsersViewSet(viewsets.ViewSet):
         serializer = serializers.UserSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_CREATED)
 
-
     """
     > The update function takes a request and a primary key (pk) as arguments. It then gets the user
     with the given pk, creates a serializer with the user and the request data, and if the serializer is
     valid, it saves the serializer and returns a 202 Accepted response with the serializer data. If the
-    serializer is not valid, it returns a 400 Bad Request response with the serializer errors
-    
+    serializer is not valid, it returns a 400 Bad Request response with the serializer errors    
     :param request: The request object
     :param pk: The primary key of the user you want to update
     :return: The serializer.data is being returned.
@@ -399,10 +367,8 @@ class UsersViewSet(viewsets.ViewSet):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
     """
-    It takes a request and a primary key, and deletes the user with that primary key
-    
+    It takes a request and a primary key, and deletes the user with that primary key    
     :param request: The request object
     :param pk: The primary key of the object you want to retrieve
     :return: The response is being returned.

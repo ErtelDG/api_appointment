@@ -25,12 +25,18 @@ class Doctor(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     speciality = models.CharField(max_length=50, choices=SPECIALITY_CHOICES)
     title = models.CharField(max_length=50, choices= TITLE_CHOICES)
+    
+    def __str__(self):
+        return self.user.username
 
 
 # It creates a one-to-one relationship between the User model and the Patient model.
 class Patient(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     is_patient = models.BooleanField(default=True)
+    
+    def __str__(self):
+        return self.user.username
       
       
 # It creates a class called Appointment. It has a title, description, patient, doctor, date, and
@@ -56,5 +62,8 @@ class Appointment(models.Model):
     doctor = models.ForeignKey(Doctor,on_delete=models.CASCADE)
     date = models.DateTimeField(default=datetime.utcnow, validators=[validate_date])
     created_at = models.DateTimeField(auto_created=datetime.now(), default=datetime.now())
+    
+    def __str__(self):
+        return self.title
     
 
