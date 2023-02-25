@@ -27,7 +27,7 @@ class DoctorViewSet(viewsets.ViewSet):
     def list(self, request):
         queryset = models.Doctor.objects.all()
         serializer = serializers.DoctorSerializer(queryset, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     """
     If the user serializer is valid, save the user, then if the doctor serializer is valid, save the
